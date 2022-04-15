@@ -8,7 +8,7 @@ inputs:
 outputs:
   pdf:
     description: "path to the rendered PDF file"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
+    value: ${{ steps.get_path.outputs.pdf_path }}
 runs:
   using: "composite"
   steps:
@@ -33,9 +33,4 @@ runs:
     - id: get_path
       name: extract file name from config file
       shell: bash
-      run:  hocon -i ${{ inputs.path }}/.latex get fileName
-
-    - id: pdf_path
-      name: echo pdf path
-      run: echo "::set-output name=pdf::${{ inputs.path }}/${{ steps.random-number-generator.outputs.random-id }}"
-      shell: bash
+      run:  echo "::set-output name=pdf_path::${{ inputs.path }}/$(hocon -i ${{ inputs.path }}/.latex get fileName)"
