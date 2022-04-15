@@ -1,0 +1,39 @@
+name: 'textool action'
+description: 'compiles a main.tex to a PDF file'
+inputs:
+  path:
+    description: 'Project path'
+    required: true
+    default: '.'
+outputs:
+  pdf:
+    description: "path to the rendered PDF file"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  using: "composite"
+  steps:
+    - uses: ruby/setup-ruby@v1
+
+    - name: install hocon
+      run: gem install hocon
+      shell: bash
+
+    - name: Download textool
+      run: curl -L -o /usr/local/bin/textool https://github.com/alexander-lindner/latex/releases/download/v2.1.4/textool-linux-amd64 && chmod +x /usr/local/bin/textool
+      shell: bash
+      id: download
+
+    - id: compile
+      name: compile to .tex file
+      run: textool -p ${{ inputs.path }} run
+      shell: bash
+
+    - id: get_path
+      name: extract file name from config file
+      shell: bash
+      run:  hocon -i ${{ inputs.path }}/.latex get fileName
+
+    - id: pdf_path
+      name: echo pdf path
+      run: echo "::set-output name=pdf::${{ inputs.path }}/${{ steps.random-number-generator.outputs.random-id }}"
+      shell: bash
