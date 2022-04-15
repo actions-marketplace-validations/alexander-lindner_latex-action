@@ -33,4 +33,4 @@ runs:
     - id: get_path
       name: extract file name from config file
       shell: bash
-      run:  echo "::set-output name=pdf_path::${{ inputs.path }}/$(hocon -i ${{ inputs.path }}/.latex get fileName)"
+      run:  echo "::set-output name=pdf_path::${{ inputs.path }}/$(hocon -i ${{ inputs.path }}/.latex get fileName | tr -d '"' )"
