@@ -12,16 +12,9 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.0'
-
-    - name: install hocon
-      run: gem install hocon
-      shell: bash
 
     - name: Download textool
-      run: curl -L -o /usr/local/bin/textool https://github.com/alexander-lindner/latex/releases/download/v2.1.4/textool-linux-amd64 && chmod +x /usr/local/bin/textool
+      run: curl -L -o /usr/local/bin/textool https://github.com/alexander-lindner/latex/releases/download/v2.1.5/textool-linux-amd64 && chmod +x /usr/local/bin/textool
       shell: bash
       id: download
 
@@ -33,4 +26,4 @@ runs:
     - id: get_path
       name: extract file name from config file
       shell: bash
-      run:  echo "::set-output name=pdf_path::${{ inputs.path }}/$(hocon -i ${{ inputs.path }}/.latex get fileName | tr -d '"' )"
+      run:  echo "::set-output name=pdf_path::${{ inputs.path }}/$(textool -p ${{ inputs.path }} config fileName | tr -d '"' )"
