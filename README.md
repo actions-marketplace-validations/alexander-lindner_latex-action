@@ -20,7 +20,7 @@ steps:
     uses: docker/setup-buildx-action@v1
     
   - id: latex
-    uses: alexander-lindner/latex-action@v1.4
+    uses: alexander-lindner/latex-action@v1.6
     with:
       path: 'thesis'
 
